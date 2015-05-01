@@ -389,12 +389,16 @@ class GraphicsView(QtWidgets.QGraphicsView):
                 QtWidgets.QMessageBox.critical(self, "Connection", "Cannot connect this port!")
                 return
 
+            if source_item.node().server().protocol() != destination_item.node().server().protocol():
+                QtWidgets.QMessageBox.critical(self, "Connection", "Sorry, you cannot connect a device running on an insecure server to a device running on a secure server.")
+                return
+
             if isinstance(source_item.node(), Cloud) and isinstance(destination_item.node(), Cloud):
                 QtWidgets.QMessageBox.critical(self, "Connection", "Sorry, you cannot connect a cloud to another cloud!")
                 return
 
-            source_host = source_item.node().server().host
-            destination_host = destination_item.node().server().host
+            source_host = source_item.node().server().host()
+            destination_host = destination_item.node().server().host()
 
             # check that the node can be connected to a cloud
             if (isinstance(source_item.node(), Cloud) or isinstance(destination_item.node(), Cloud)) and source_host != destination_host:
@@ -524,7 +528,7 @@ class GraphicsView(QtWidgets.QGraphicsView):
         if event.modifiers() == QtCore.Qt.ControlModifier:
             # event.delta() added for Qt4 compatibility
             delta = event.angleDelta() if hasattr(event, 'angleDelta') else event.delta()
-            if not delta == None and delta.x() == 0:
+            if delta is not None and delta.x() == 0:
                 # CTRL is pressed then use the mouse wheel to zoom in or out.
                 self.scaleView(pow(2.0, delta.y() / 240.0))
         else:
@@ -947,30 +951,11 @@ class GraphicsView(QtWidgets.QGraphicsView):
                     return False
             else:
                 console_port = node.console()
-            console_host = node.server().host
+            console_host = node.server().host()
             try:
-                from .telnet_console import telnetConsole
+                from .telnet_console import nodeTelnetConsole
 
-                telnet_callback = None
-
-                try:
-                    if node.server().isCloud():
-                        # override target host with localhost
-                        console_host = '127.0.0.1'
-                        ep = node.server().tunnel.add_endpoint(console_host, console_port)
-                        # override target port with local tunneled port
-                        local_addr, _ = ep.get()
-                        console_port = local_addr[1]
-
-                        def cb(*args, **kwargs):
-                            node.server().tunnel.remove_endpoint(ep)
-                            log.debug('Console DONE on port {}'.format(args[2]))
-                        telnet_callback = cb
-
-                except AttributeError:
-                    pass
-
-                telnetConsole(name, console_host, console_port, telnet_callback)
+                nodeTelnetConsole(name, node.server(), console_port)
             except (OSError, ValueError) as e:
                 QtWidgets.QMessageBox.critical(self, "Console", "Cannot start console application: {}".format(e))
                 return False
@@ -1350,11 +1335,7 @@ class GraphicsView(QtWidgets.QGraphicsView):
             elif node_data["server"] == "cloud":
                 server = Servers.instance().anyCloudServer()
             else:
-                try:
-                    host, port = node_data["server"].rsplit(":", 1)
-                except ValueError:
-                    raise ModuleError("Wrong format for server: '{}', please recreate the node in preferences".format(node_data["server"]))
-                server = Servers.instance().getRemoteServer(host, port)
+                server = Servers.instance().getServerFromString(node_data["server"])
 
             if server is None:
                 return

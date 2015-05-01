@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'cloud_configuration_page.ui'
 #
-# Created: Sun May 10 20:46:23 2015
+# Created: Mon May 11 14:42:26 2015
 #      by: PyQt5 UI code generator 5.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -10,7 +10,9 @@
 import gns3.qt
 from gns3.qt import QtCore, QtGui, QtWidgets
 
+
 class Ui_cloudConfigPageWidget(object):
+
     def setupUi(self, cloudConfigPageWidget):
         cloudConfigPageWidget.setObjectName("cloudConfigPageWidget")
         cloudConfigPageWidget.resize(653, 478)
@@ -417,7 +419,7 @@ class Ui_cloudConfigPageWidget(object):
         self.uiDeleteLinuxEthernetPushButton.setText(_translate("cloudConfigPageWidget", "&Delete"))
         self.uiNIOsTabWidget.setTabText(self.uiNIOsTabWidget.indexOf(self.NIOEthernetTab), _translate("cloudConfigPageWidget", "Ethernet"))
         self.uiNIONATSettingsGroupBox.setTitle(_translate("cloudConfigPageWidget", "Settings"))
-        self.uiNIONATIdentifierLabel.setText(_translate("cloudConfigPageWidget", "Identifier:"))
+        self.uiNIONATIdentifierLabel.setText(_translate("cloudConfigPageWidget", "Local identifier:"))
         self.uiNIONATListGroupBox.setTitle(_translate("cloudConfigPageWidget", "NIOs"))
         self.uiAddNIONATPushButton.setText(_translate("cloudConfigPageWidget", "&Add"))
         self.uiDeleteNIONATPushButton.setText(_translate("cloudConfigPageWidget", "&Delete"))
@@ -450,11 +452,10 @@ class Ui_cloudConfigPageWidget(object):
         self.uiDeleteNIOVDEPushButton.setText(_translate("cloudConfigPageWidget", "&Delete"))
         self.uiNIOsTabWidget.setTabText(self.uiNIOsTabWidget.indexOf(self.NIOVDETab), _translate("cloudConfigPageWidget", "VDE"))
         self.uiNIONullSettingsGroupBox.setTitle(_translate("cloudConfigPageWidget", "Settings"))
-        self.uiNIONullIdentifierLabel.setText(_translate("cloudConfigPageWidget", "Identifier:"))
+        self.uiNIONullIdentifierLabel.setText(_translate("cloudConfigPageWidget", "Local identifier:"))
         self.uiNIONullListGroupBox.setTitle(_translate("cloudConfigPageWidget", "NIOs"))
         self.uiAddNIONullPushButton.setText(_translate("cloudConfigPageWidget", "&Add"))
         self.uiDeleteNIONullPushButton.setText(_translate("cloudConfigPageWidget", "&Delete"))
         self.uiNIOsTabWidget.setTabText(self.uiNIOsTabWidget.indexOf(self.NIONullTab), _translate("cloudConfigPageWidget", "NULL"))
         self.uiNameLabel.setText(_translate("cloudConfigPageWidget", "Name:"))
         self.uiNIOsTabWidget.setTabText(self.uiNIOsTabWidget.indexOf(self.MiscTab), _translate("cloudConfigPageWidget", "Misc."))
-
